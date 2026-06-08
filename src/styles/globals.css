@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* ─── Brand tokens ─────────────────────────────────────── */
+:root {
+  --color-primary:    #2e2d32;
+  --color-teal:       #336065;
+  --color-midgrey:    #a2a0a2;
+  --color-lightgrey:  #f4f4f4;
+  --color-white:      #ffffff;
+  --color-dark-hero:  #0a0a0a;
+}
+
+/* ─── Reset ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  color: var(--color-primary);
+  background: var(--color-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Hide OS cursor on pointer devices — custom cursor takes over */
+@media (hover: hover) and (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+img, video, iframe {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Typography ───────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+/* ─── Scroll indicator pulse ───────────────────────────── */
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.25; transform: scaleY(0.92); }
+  50%       { opacity: 0.7;  transform: scaleY(1); }
+}
+
+.scroll-indicator-line {
+  animation: scroll-pulse 2.2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* ─── Global image hover container ────────────────────── */
+.img-hover-wrap {
+  overflow: hidden;
+}
+
+.img-hover-wrap img,
+.img-hover-wrap .placeholder-img {
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.img-hover-wrap:hover img,
+.img-hover-wrap:hover .placeholder-img {
+  transform: scale(1.03);
+}
+
+/* Nav wordmark entry */
+@keyframes navFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Film grain — stepped background-position shift gives 25fps grain flicker */
+@keyframes grain-shift {
+  0%   { background-position:   0px   0px; }
+  10%  { background-position: -52px  98px; }
+  20%  { background-position: 183px -74px; }
+  30%  { background-position: -97px 210px; }
+  40%  { background-position:  68px -47px; }
+  50%  { background-position:-144px 162px; }
+  60%  { background-position:  99px  55px; }
+  70%  { background-position: -71px-108px; }
+  80%  { background-position: 217px 193px; }
+  90%  { background-position:-196px  71px; }
+  100% { background-position:   0px   0px; }
+}
+
+.grain-overlay {
+  animation: grain-shift 0.4s steps(1) infinite;
+}
+
+/* ─── Nav responsive ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-desktop    { display: none !important; }
+  .nav-hamburger  { display: flex !important; }
+}
+
+/* ─── Masonry grid responsive ──────────────────────────── */
+@media (max-width: 1024px) {
+  .masonry-grid { columns: 2 !important; }
+}
+
+@media (max-width: 640px) {
+  .masonry-grid { columns: 1 !important; }
+}
+
+/* ─── Mobile typography scale ──────────────────────────── */
+@media (max-width: 768px) {
+  h1, h2 { letter-spacing: 0.03em; }
+
+  /* Work grid — single column on mobile */
+  .work-grid-row { flex-direction: column !important; }
+  .work-grid-row > div { flex: 0 0 100% !important; width: 100% !important; }
+}
+
+/* ─── No border-radius anywhere — enforce globally ─────── */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+/* ─── No box shadows on images/cards ───────────────────── */
+[data-cursor="image"],
+[data-cursor="video"] {
+  box-shadow: none !important;
+}
+
+/* ─── Form input focus — minimal ───────────────────────── */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-bottom-color: #336065 !important;
+}
+
+/* ─── Select reset ─────────────────────────────────────── */
+select {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #2e2d32;
+  padding: 10px 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: #2e2d32;
+  width: 100%;
+  cursor: none;
+}

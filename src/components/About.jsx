@@ -1,70 +1,34 @@
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import portrait from '../assets/images/nick-portrait.jpg'
 
-export default function About() {
-  return (
-    <section
-      id="about"
-      data-theme="light"
-      style={{
-        display: 'flex',
-        height: '100vh',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Left — portrait, full 50vw, 100vh */}
-      <div style={{
-        flex: '0 0 50vw',
-        width: '50vw',
-        height: '100vh',
-        overflow: 'hidden',
-        position: 'relative',
-      }}>
-        <img
-          src={portrait}
-          alt="Nickolas May"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'top center',
-            display: 'block',
-          }}
-        />
-      </div>
+gsap.registerPlugin(ScrollTrigger)
 
-      {/* Right — #F2EFE9 background, text vertically centred */}
-      <div style={{
-        flex: '1',
-        background: '#F2EFE9',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 7vw',
-      }}>
-        <div style={{ maxWidth: '480px' }}>
-          <h2 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontWeight: 400,
-            fontSize: '5vw',
-            color: '#1C1C1C',
-            letterSpacing: '0.03em',
-            margin: '0 0 28px',
-            lineHeight: 1,
-          }}>
-            Nickolas May
-          </h2>
-          <p style={{
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: 300,
-            fontSize: '17px',
-            lineHeight: 1.8,
-            color: '#1C1C1C',
-            margin: 0,
-          }}>
-            Gold Cannes Lions Winner. 17 years experience creating high-end commercial work across Australia and internationally for brands including Qantas, Tourism Whitsundays and Chang Beer. Crafting cinematic film and photography through a blend of traditional production experience and AI-enhanced workflows.
-          </p>
-        </div>
+export default function About() {
+  const ref = useRef()
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(ref.current,
+        { opacity: 0, y: 50 },
+        { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out',
+          scrollTrigger: { trigger: ref.current, start: 'top 75%' }
+        }
+      )
+    })
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section id="about" data-theme="light" style={{ background:'#F2EFE9', padding:'140px 10vw', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'80px', alignItems:'center' }}>
+      <img src={portrait} alt="Nickolas May" style={{ width:'100%', aspectRatio:'4/5', objectFit:'cover', objectPosition:'top', filter:'grayscale(15%)' }} />
+      <div ref={ref} style={{ opacity:0 }}>
+        <p style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'11px', letterSpacing:'0.25em', color:'#1C1C1C', opacity:0.45, marginBottom:'28px', textTransform:'uppercase' }}>About</p>
+        <p style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:300, fontSize:'clamp(15px,1.3vw,19px)', lineHeight:1.8, color:'#1C1C1C', opacity:0.75, margin:'0 0 32px' }}>
+          Gold Cannes Lions Winner. 17 years experience creating high-end commercial work across Australia and internationally for brands including Qantas, Tourism Whitsundays and Chang Beer. Crafting cinematic film and photography through a blend of traditional production experience and AI-enhanced workflows.
+        </p>
+        <a href="mailto:nick@nickolasmay.com" style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'11px', letterSpacing:'0.2em', color:'#1C1C1C', textDecoration:'none', textTransform:'uppercase', borderBottom:'1px solid #1C1C1C', paddingBottom:'2px' }}>Get In Touch</a>
       </div>
     </section>
   )

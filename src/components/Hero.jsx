@@ -1,159 +1,63 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import heroVideo from '../assets/video/hero-web.mp4';
+import { useEffect, useRef } from 'react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import heroVideo from '../assets/video/hero-web.mp4'
 
-gsap.registerPlugin(ScrollTrigger);
-
-const words = ['FILMMAKER', 'PHOTOGRAPHER', 'AI DIRECTOR'];
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
-  const sectionRef  = useRef();
-  const nameRef     = useRef();
-  const subtitleRef = useRef();
-  const credRef     = useRef();
-  const [wordIndex, setWordIndex] = useState(0);
+  const sectionRef = useRef()
+  const nameRef = useRef()
+  const titleRef = useRef()
+  const credRef = useRef()
 
-  // Cycling subtitle
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex(i => (i + 1) % words.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
+    const vh = window.innerHeight
+    gsap.set(nameRef.current, { y: vh })
+    gsap.set(titleRef.current, { y: vh })
+    gsap.set(credRef.current, { y: vh })
 
-  // Scroll-driven text reveal
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=100%',
-          scrub: true,
-          invalidateOnRefresh: true,
-        },
-      });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '70% top',
+        scrub: 2,
+      }
+    })
 
-      // All three text elements start below viewport, rise together on scroll
-      tl.from([nameRef.current, subtitleRef.current, credRef.current], {
-        yPercent: 120,
-        ease: 'none',
-        stagger: 0.05,
-      });
-    }, sectionRef);
+    tl.to(nameRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0)
+      .to(titleRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0.15)
+      .to(credRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0.28)
 
-    return () => ctx.revert();
-  }, []);
+    return () => tl.kill()
+  }, [])
 
   return (
-    // Section is 200vh — gives scroll room for the reveal
-    <section
-      ref={sectionRef}
-      style={{ position: 'relative', height: '200vh' }}
-    >
-      {/* Sticky container — video + text pin here while section scrolls */}
-      <div style={{
-        position: 'sticky',
-        top: 0,
-        height: '100vh',
-        overflow: 'hidden',
-        background: '#0a0a0a',
-      }}>
-        {/* Video */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-          }}
-        >
+    <div ref={sectionRef} style={{ height:'280vh', position:'relative' }}>
+      <div style={{ position:'sticky', top:0, height:'100vh', overflow:'hidden' }}>
+        <video autoPlay muted loop playsInline style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', display:'block', opacity:0.88, filter:'brightness(1.15)' }}>
           <source src={heroVideo} type="video/mp4" />
         </video>
-
-        {/* Overlay */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(0,0,0,0.4)',
-        }} />
-
-        {/* Nav */}
-        <nav style={{
-          position: 'absolute',
-          top: '40px',
-          right: '40px',
-          display: 'flex',
-          gap: '40px',
-          zIndex: 10,
-        }}>
-          {['WORK', 'ABOUT', 'CONTACT'].map(item => (
-            <a key={item} href={`#${item.toLowerCase()}`} style={{
-              color: '#fff',
-              textDecoration: 'none',
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '12px',
-              letterSpacing: '0.25em',
-              fontWeight: 400,
-            }}>{item}</a>
-          ))}
+        <nav style={{ position:'absolute', top:0, left:0, right:0, display:'flex', alignItems:'center', justifyContent:'flex-end', padding:'36px 56px', zIndex:10 }}>
+          <ul style={{ display:'flex', gap:'48px', listStyle:'none', margin:0, padding:0 }}>
+            {['WORK','ABOUT','CONTACT'].map((item) => (
+              <li key={item}><a href={`#${item.toLowerCase()}`} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'11px', letterSpacing:'0.2em', color:'#fff', textDecoration:'none', opacity:0.85 }}>{item}</a></li>
+            ))}
+          </ul>
         </nav>
-
-        {/* Text block — centred, overflow hidden so text wipes up from below */}
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-          width: '90%',
-          zIndex: 10,
-          overflow: 'hidden',
-        }}>
-          <div ref={nameRef} style={{ overflow: 'hidden' }}>
-            <h1 style={{
-              fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(40px, 8vw, 120px)',
-              color: '#fff',
-              letterSpacing: '0.02em',
-              lineHeight: 1,
-              margin: '0 0 16px 0',
-              whiteSpace: 'nowrap',
-            }}>NICKOLAS MAY</h1>
-          </div>
-
-          <div ref={subtitleRef} style={{ overflow: 'hidden' }}>
-            <p key={wordIndex} style={{
-              fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(18px, 3vw, 48px)',
-              color: '#fff',
-              letterSpacing: '0.2em',
-              margin: 0,
-              animation: 'fadeUp 0.4s ease forwards',
-            }}>{words[wordIndex]}</p>
-          </div>
-        </div>
-
-        {/* Credential */}
-        <div style={{ overflow: 'hidden', position: 'absolute', bottom: '40px', left: 0, width: '100%', zIndex: 10 }}>
-          <p ref={credRef} style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '11px',
-            letterSpacing: '0.4em',
-            color: 'rgba(255,255,255,0.6)',
-            margin: 0,
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
-          }}>GOLD CANNES LIONS WINNER</p>
+        <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, textAlign:'center', padding:'0 6vw' }}>
+          <h1 ref={nameRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:700, fontSize:'clamp(52px,8vw,120px)', lineHeight:0.95, color:'#fff', margin:'0 0 16px', letterSpacing:'0.05em', textTransform:'uppercase' }}>
+            Nickolas May
+          </h1>
+          <h2 ref={titleRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:500, fontSize:'clamp(20px,3vw,46px)', lineHeight:1.05, color:'#fff', margin:'0 0 16px', letterSpacing:'0.08em', textTransform:'uppercase' }}>
+            Hybrid Filmmaker,<br/>Photographer & AI Director
+          </h2>
+          <p ref={credRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:500, fontSize:'13px', letterSpacing:'0.3em', color:'#fff', margin:0, textTransform:'uppercase', opacity:0.85 }}>
+            Gold Cannes Lions Winner
+          </p>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  )
 }

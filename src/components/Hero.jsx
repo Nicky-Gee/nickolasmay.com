@@ -120,7 +120,7 @@ export default function Hero() {
           <div ref={nameRef} style={{ overflow: 'hidden' }}>
             <h1 style={{
               fontFamily: '"Bebas Neue", sans-serif',
-              fontSize: 'clamp(60px, 10vw, 160px)',
+              fontSize: 'clamp(40px, 8vw, 120px)',
               color: '#fff',
               letterSpacing: '0.02em',
               lineHeight: 1,

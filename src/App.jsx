@@ -22,7 +22,11 @@ export default function App() {
     const lenisRaf = (time) => lenis.raf(time * 1000)
     gsap.ticker.add(lenisRaf)
     gsap.ticker.lagSmoothing(0)
+
+    const refreshTimer = setTimeout(() => ScrollTrigger.refresh(), 500)
+
     return () => {
+      clearTimeout(refreshTimer)
       lenis.destroy()
       gsap.ticker.remove(lenisRaf)
     }

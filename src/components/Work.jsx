@@ -36,32 +36,29 @@ export default function Work() {
       // Simultaneously the outgoing card (i-1) fades to opacity 0 so there's
       // no hard image boundary at the wipe edge.
       for (let i = 1; i < N; i++) {
-        const start = (i - 1) * 100  // in vh units relative to section pin start
-        const end   = i * 100
-
-        gsap.to(cardRefs.current[i], {
+        const idx = i
+        gsap.to(cardRefs.current[idx], {
           yPercent: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: `top+=${start}vh top`,
-            end:   `top+=${end}vh top`,
+            start: () => `top+=${(idx - 1) * window.innerHeight}px top`,
+            end:   () => `top+=${idx * window.innerHeight}px top`,
             scrub: true,
             invalidateOnRefresh: true,
           },
         })
 
-
         // Ken Burns on this card while it's the active card on screen
-        gsap.fromTo(imgRefs.current[i],
+        gsap.fromTo(imgRefs.current[idx],
           { scale: 1 },
           {
             scale: 1.06,
             ease: 'none',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: `top+=${end}vh top`,
-              end:   `top+=${end + 100}vh top`,
+              start: () => `top+=${idx * window.innerHeight}px top`,
+              end:   () => `top+=${(idx + 1) * window.innerHeight}px top`,
               scrub: 2,
               invalidateOnRefresh: true,
             },
@@ -78,7 +75,7 @@ export default function Work() {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top top',
-            end:   'top+=-100vh top',
+            end:   () => `top+=${window.innerHeight}px top`,
             scrub: 2,
             invalidateOnRefresh: true,
           },

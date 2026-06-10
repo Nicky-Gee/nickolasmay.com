@@ -65,7 +65,7 @@ export default function Hero() {
       </nav>
 
       {/* Name + cycling subtitle — bottom left */}
-      <div style={{ position: 'absolute', bottom: '12vh', left: '6vw', zIndex: 10 }}>
+      <div style={{ position: 'absolute', bottom: '12vh', left: '6vw', zIndex: 10, textAlign: 'left' }}>
         <h1 style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontWeight: 400,
@@ -75,6 +75,8 @@ export default function Hero() {
           letterSpacing: '0.02em',
           margin: 0,
           whiteSpace: 'nowrap',
+          textAlign: 'left',
+          display: 'block',
         }}>
           NICKOLAS MAY
         </h1>

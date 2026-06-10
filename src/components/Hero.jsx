@@ -1,122 +1,110 @@
-import { useEffect, useRef, useState } from 'react'
-import heroVideo from '../assets/video/hero-web.mp4'
+import React, { useEffect, useState, useRef } from 'react';
+import heroVideo from '../assets/video/hero-web.mp4';
 
-const WORDS = ['FILMMAKER', 'PHOTOGRAPHER', 'AI DIRECTOR']
+const words = ['FILMMAKER', 'PHOTOGRAPHER', 'AI DIRECTOR'];
 
 export default function Hero() {
-  const videoRef = useRef()
-  const [wordIndex, setWordIndex] = useState(0)
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true
-      videoRef.current.play().catch(() => {})
-    }
-  }, [])
+  const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setWordIndex(i => (i + 1) % WORDS.length)
-    }, 2500)
-    return () => clearInterval(interval)
-  }, [])
+      setWordIndex(i => (i + 1) % words.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div style={{ height: '100vh', position: 'relative', overflow: 'hidden', background: '#0A0A0A' }}>
-      {/* Video */}
+    <section style={{
+      position: 'relative',
+      width: '100%',
+      height: '100vh',
+      overflow: 'hidden',
+      background: '#0a0a0a',
+    }}>
       <video
-        ref={videoRef}
         autoPlay
-        muted={true}
+        muted
         loop
         playsInline
         preload="auto"
         style={{
-          position: 'absolute', inset: 0, width: '100%', height: '100%',
-          objectFit: 'cover', display: 'block',
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
         }}
       >
         <source src={heroVideo} type="video/mp4" />
       </video>
 
-      {/* Dark overlay */}
-      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)' }} />
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(0,0,0,0.4)',
+      }} />
 
-      {/* Nav — top right */}
-      <nav style={{ position: 'absolute', top: 0, right: 0, padding: '36px 6vw', zIndex: 10 }}>
-        <ul style={{ display: 'flex', gap: '48px', listStyle: 'none', margin: 0, padding: 0 }}>
-          {['WORK', 'ABOUT', 'CONTACT'].map(item => (
-            <li key={item}>
-              <a
-                href={`#${item.toLowerCase()}`}
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 400,
-                  fontSize: '12px',
-                  letterSpacing: '0.25em',
-                  color: '#fff',
-                  textDecoration: 'none',
-                }}
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <nav style={{
+        position: 'absolute',
+        top: '40px',
+        right: '40px',
+        display: 'flex',
+        gap: '40px',
+        zIndex: 10,
+      }}>
+        {['WORK','ABOUT','CONTACT'].map(item => (
+          <a key={item} href={`#${item.toLowerCase()}`} style={{
+            color: '#fff',
+            textDecoration: 'none',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '12px',
+            letterSpacing: '0.25em',
+            fontWeight: 400,
+          }}>{item}</a>
+        ))}
       </nav>
 
-      {/* Name + cycling subtitle — bottom left */}
-      <div style={{ position: 'absolute', bottom: '12vh', left: '6vw', zIndex: 10, textAlign: 'left' }}>
+      <div style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center',
+        width: '90%',
+        zIndex: 10,
+      }}>
         <h1 style={{
-          fontFamily: "'Bebas Neue', sans-serif",
-          fontWeight: 400,
-          fontSize: '12vw',
-          lineHeight: 0.9,
+          fontFamily: '"Bebas Neue", sans-serif',
+          fontSize: 'clamp(60px, 10vw, 160px)',
           color: '#fff',
           letterSpacing: '0.02em',
-          margin: 0,
+          lineHeight: 1,
+          margin: '0 0 16px 0',
           whiteSpace: 'nowrap',
-          textAlign: 'left',
-          display: 'block',
-        }}>
-          NICKOLAS MAY
-        </h1>
-
-        {/* Cycling subtitle — key forces remount → fresh animation every swap */}
-        <div style={{ overflow: 'hidden', marginTop: '0.6vw' }}>
-          <p
-            key={wordIndex}
-            style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontWeight: 400,
-              fontSize: '5vw',
-              color: '#fff',
-              letterSpacing: '0.15em',
-              margin: 0,
-              animation: 'wordSlideIn 0.25s cubic-bezier(0.22,1,0.36,1) forwards',
-            }}
-          >
-            {WORDS[wordIndex]}
-          </p>
-        </div>
+        }}>NICKOLAS MAY</h1>
+        <p key={wordIndex} style={{
+          fontFamily: '"Bebas Neue", sans-serif',
+          fontSize: 'clamp(18px, 3vw, 48px)',
+          color: '#fff',
+          letterSpacing: '0.2em',
+          margin: 0,
+          animation: 'fadeUp 0.4s ease forwards',
+        }}>{words[wordIndex]}</p>
       </div>
 
-      {/* Award credential — bottom left, lower */}
       <p style={{
         position: 'absolute',
-        bottom: '4vh',
-        left: '6vw',
-        zIndex: 10,
-        fontFamily: "'Inter', sans-serif",
-        fontWeight: 300,
+        bottom: '40px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        fontFamily: 'Inter, sans-serif',
         fontSize: '11px',
         letterSpacing: '0.4em',
         color: 'rgba(255,255,255,0.6)',
         margin: 0,
-        textTransform: 'uppercase',
-      }}>
-        Gold Cannes Lions Winner
-      </p>
-    </div>
-  )
+        zIndex: 10,
+        whiteSpace: 'nowrap',
+      }}>GOLD CANNES LIONS WINNER</p>
+    </section>
+  );
 }

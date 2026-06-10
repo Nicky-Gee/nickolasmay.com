@@ -22,7 +22,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <div style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ height: '100vh', position: 'relative', overflow: 'hidden', background: '#0A0A0A' }}>
       {/* Video */}
       <video
         ref={videoRef}
@@ -30,6 +30,7 @@ export default function Hero() {
         muted={true}
         loop
         playsInline
+        preload="auto"
         style={{
           position: 'absolute', inset: 0, width: '100%', height: '100%',
           objectFit: 'cover', display: 'block',
@@ -69,7 +70,7 @@ export default function Hero() {
         <h1 style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontWeight: 400,
-          fontSize: '18vw',
+          fontSize: '12vw',
           lineHeight: 0.9,
           color: '#fff',
           letterSpacing: '0.02em',

@@ -1,11 +1,75 @@
 export default function Contact() {
   return (
-    <section id="contact" style={{ background:'#1C1C1C', padding:'120px 10vw', display:'flex', flexDirection:'column', alignItems:'flex-start', gap:'32px' }}>
-      <p style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'11px', letterSpacing:'0.25em', color:'#fff', opacity:0.4, textTransform:'uppercase', margin:0 }}>Contact</p>
-      <h2 style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:700, fontSize:'clamp(32px,4vw,56px)', color:'#F2EFE9', margin:0, lineHeight:1.1, letterSpacing:'0.02em' }}>Real Creative Experience.<br/>Modern AI Workflows.<br/>Cinematic Commercial Results.</h2>
-      <div style={{ display:'flex', gap:'48px', marginTop:'16px' }}>
-        <a href="mailto:nick@nickolasmay.com" style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'12px', letterSpacing:'0.15em', color:'#F2EFE9', textDecoration:'none', opacity:0.7, textTransform:'uppercase' }}>nick@nickolasmay.com</a>
-        <a href="https://www.instagram.com/nickolas_may_" target="_blank" rel="noreferrer" style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'12px', letterSpacing:'0.15em', color:'#F2EFE9', textDecoration:'none', opacity:0.7, textTransform:'uppercase' }}>Instagram</a>
+    <section
+      id="contact"
+      style={{
+        background:    '#0A0A0A',
+        padding:       '120px 6vw 80px',
+        display:       'flex',
+        flexDirection: 'column',
+        justifyContent:'space-between',
+        minHeight:     '80vh',
+      }}
+    >
+      {/* Three-line statement */}
+      <div>
+        {[
+          'Real Creative Experience.',
+          'Modern AI Workflows.',
+          'Cinematic Commercial Results.',
+        ].map(line => (
+          <h2
+            key={line}
+            style={{
+              fontFamily:    "'Bebas Neue', sans-serif",
+              fontWeight:    400,
+              fontSize:      '7vw',
+              color:         '#F2EFE9',
+              letterSpacing: '0.02em',
+              lineHeight:    1.05,
+              margin:        0,
+              textAlign:     'left',
+            }}
+          >
+            {line}
+          </h2>
+        ))}
+      </div>
+
+      {/* Email + Instagram — bottom left */}
+      <div style={{ display: 'flex', gap: '48px', marginTop: '60px' }}>
+        <a
+          href="mailto:nick@nickolasmay.com"
+          style={{
+            fontFamily:    "'Inter', sans-serif",
+            fontWeight:    300,
+            fontSize:      '12px',
+            letterSpacing: '0.3em',
+            color:         '#F2EFE9',
+            textDecoration:'none',
+            textTransform: 'uppercase',
+            opacity:       0.7,
+          }}
+        >
+          nick@nickolasmay.com
+        </a>
+        <a
+          href="https://www.instagram.com/nickolas_may_"
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            fontFamily:    "'Inter', sans-serif",
+            fontWeight:    300,
+            fontSize:      '12px',
+            letterSpacing: '0.3em',
+            color:         '#F2EFE9',
+            textDecoration:'none',
+            textTransform: 'uppercase',
+            opacity:       0.7,
+          }}
+        >
+          Instagram
+        </a>
       </div>
     </section>
   )

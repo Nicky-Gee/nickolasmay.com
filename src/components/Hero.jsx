@@ -1,63 +1,119 @@
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef, useState } from 'react'
 import heroVideo from '../assets/video/hero-web.mp4'
 
-gsap.registerPlugin(ScrollTrigger)
+const WORDS = ['FILMMAKER', 'PHOTOGRAPHER', 'AI DIRECTOR']
 
 export default function Hero() {
-  const sectionRef = useRef()
-  const nameRef = useRef()
-  const titleRef = useRef()
-  const credRef = useRef()
+  const videoRef = useRef()
+  const [wordIndex, setWordIndex] = useState(0)
 
   useEffect(() => {
-    const vh = window.innerHeight
-    gsap.set(nameRef.current, { y: vh })
-    gsap.set(titleRef.current, { y: vh })
-    gsap.set(credRef.current, { y: vh })
+    if (videoRef.current) {
+      videoRef.current.muted = true
+      videoRef.current.play().catch(() => {})
+    }
+  }, [])
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '70% top',
-        scrub: 2,
-      }
-    })
-
-    tl.to(nameRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0)
-      .to(titleRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0.15)
-      .to(credRef.current, { y: 0, duration: 1, ease: 'power3.out' }, 0.28)
-
-    return () => tl.kill()
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex(i => (i + 1) % WORDS.length)
+    }, 2500)
+    return () => clearInterval(interval)
   }, [])
 
   return (
-    <div ref={sectionRef} style={{ height:'280vh', position:'relative' }}>
-      <div style={{ position:'sticky', top:0, height:'100vh', overflow:'hidden' }}>
-        <video autoPlay muted loop playsInline style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', display:'block', opacity:0.88, filter:'brightness(1.15)' }}>
-          <source src={heroVideo} type="video/mp4" />
-        </video>
-        <nav style={{ position:'absolute', top:0, left:0, right:0, display:'flex', alignItems:'center', justifyContent:'flex-end', padding:'36px 56px', zIndex:10 }}>
-          <ul style={{ display:'flex', gap:'48px', listStyle:'none', margin:0, padding:0 }}>
-            {['WORK','ABOUT','CONTACT'].map((item) => (
-              <li key={item}><a href={`#${item.toLowerCase()}`} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:400, fontSize:'11px', letterSpacing:'0.2em', color:'#fff', textDecoration:'none', opacity:0.85 }}>{item}</a></li>
-            ))}
-          </ul>
-        </nav>
-        <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', zIndex:10, textAlign:'center', padding:'0 6vw' }}>
-          <h1 ref={nameRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:700, fontSize:'clamp(52px,8vw,120px)', lineHeight:0.95, color:'#fff', margin:'0 0 16px', letterSpacing:'0.05em', textTransform:'uppercase' }}>
-            Nickolas May
-          </h1>
-          <h2 ref={titleRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:500, fontSize:'clamp(20px,3vw,46px)', lineHeight:1.05, color:'#fff', margin:'0 0 16px', letterSpacing:'0.08em', textTransform:'uppercase' }}>
-            Hybrid Filmmaker,<br/>Photographer & AI Director
-          </h2>
-          <p ref={credRef} style={{ fontFamily:"'futura-pt',sans-serif", fontWeight:500, fontSize:'13px', letterSpacing:'0.3em', color:'#fff', margin:0, textTransform:'uppercase', opacity:0.85 }}>
-            Gold Cannes Lions Winner
+    <div style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+      {/* Video */}
+      <video
+        ref={videoRef}
+        autoPlay
+        muted={true}
+        loop
+        playsInline
+        style={{
+          position: 'absolute', inset: 0, width: '100%', height: '100%',
+          objectFit: 'cover', display: 'block',
+        }}
+      >
+        <source src={heroVideo} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.35)' }} />
+
+      {/* Nav — top right */}
+      <nav style={{ position: 'absolute', top: 0, right: 0, padding: '36px 6vw', zIndex: 10 }}>
+        <ul style={{ display: 'flex', gap: '48px', listStyle: 'none', margin: 0, padding: 0 }}>
+          {['WORK', 'ABOUT', 'CONTACT'].map(item => (
+            <li key={item}>
+              <a
+                href={`#${item.toLowerCase()}`}
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 400,
+                  fontSize: '12px',
+                  letterSpacing: '0.25em',
+                  color: '#fff',
+                  textDecoration: 'none',
+                }}
+              >
+                {item}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {/* Name + cycling subtitle — bottom left */}
+      <div style={{ position: 'absolute', bottom: '12vh', left: '6vw', zIndex: 10 }}>
+        <h1 style={{
+          fontFamily: "'Bebas Neue', sans-serif",
+          fontWeight: 400,
+          fontSize: '18vw',
+          lineHeight: 0.9,
+          color: '#fff',
+          letterSpacing: '0.02em',
+          margin: 0,
+          whiteSpace: 'nowrap',
+        }}>
+          NICKOLAS MAY
+        </h1>
+
+        {/* Cycling subtitle — key forces remount → fresh animation every swap */}
+        <div style={{ overflow: 'hidden', marginTop: '0.6vw' }}>
+          <p
+            key={wordIndex}
+            style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontWeight: 400,
+              fontSize: '5vw',
+              color: '#fff',
+              letterSpacing: '0.15em',
+              margin: 0,
+              animation: 'wordSlideIn 0.25s cubic-bezier(0.22,1,0.36,1) forwards',
+            }}
+          >
+            {WORDS[wordIndex]}
           </p>
         </div>
       </div>
+
+      {/* Award credential — bottom left, lower */}
+      <p style={{
+        position: 'absolute',
+        bottom: '4vh',
+        left: '6vw',
+        zIndex: 10,
+        fontFamily: "'Inter', sans-serif",
+        fontWeight: 300,
+        fontSize: '11px',
+        letterSpacing: '0.4em',
+        color: 'rgba(255,255,255,0.6)',
+        margin: 0,
+        textTransform: 'uppercase',
+      }}>
+        Gold Cannes Lions Winner
+      </p>
     </div>
   )
 }
